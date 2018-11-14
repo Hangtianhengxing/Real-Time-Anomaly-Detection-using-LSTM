@@ -64,7 +64,7 @@ class Dataloader:
 		data_x = []
 		data_y = []
 		for i in range(self.len_train-self.window_size):
-			window = self.data_train[i:i+self.window_size]
+			window = self.data_train[i:i+self.window_size+1]
 			normalised_window = self.normalise(window)
 			x = normalised_window[:-1]
 			y = normalised_window[-1]
@@ -78,12 +78,12 @@ class Dataloader:
 		data_x = []
 		data_y = []
 		for i in range(self.len_test-self.window_size):
-			window = self.data_test[i:i+self.window_size]
+			window = self.data_test[i:i+self.window_size+1]
 			normalised_window = self.normalise(window)
 			x = normalised_window[:-1]
 			y = normalised_window[-1]
 			data_x.append(x)
-			data_y.append(y)
+			data_y.append(y[0])
 		#data_x = np.array(data_x)
 		#data_y = np.array(data_y)
 		return data_x, data_y

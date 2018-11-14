@@ -8,27 +8,17 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' #Hide messy TensorFlow warnings
 
 model = load_model("lstm.h5")
 
-seq_len = 200
+seq_len = 300
 data = Dataloader(seq_len,'concept drift.csv','TCP Connections Established/s')
+x_train, y_train = data.get_train_data()
 x_test,y_test = data.get_test_data()
-#print (x_test)
-#print (y_test)
-predicted_data = []
+#print (x_train.shape)
 errordata = []
 
 print ('\n[Model] Predicting point by point')
 
-for i in range(len(x_test)):
-	data = x_test[i].reshape(1,x_test[i].shape[0],1)
-	target = np.array([y_test[i]])
-	predicted = model.predict(data)
-	predicted = np.reshape(predicted,predicted.size)
-	#print (predicted)
-	#print (target.shape)
-	#model.fit(data,target,batch_size=1,nb_epoch=1)
-	predicted_data.append(predicted)
-	print (i)
-	
+predicted_data = lstm.predict_point_by_point(model,x_test,y_test,x_train,y_train)
+
 for i in range(len(predicted_data)):
 	errordata.append(predicted_data[i]-y_test[i])
 	

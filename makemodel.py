@@ -6,7 +6,7 @@ from sklearn.metrics import mean_squared_error as mse
 import warnings
 warnings.filterwarnings("ignore") # ignore messy numpy warnings
 
-seq_len = 200
+seq_len = 300
 data = Dataloader(seq_len,'concept drift.csv','TCP Connections Established/s')
 x_train,y_train = data.get_train_data()
 
@@ -16,7 +16,7 @@ x_train,y_train = data.get_train_data()
 #print ("\n \n \n")
 #print (y_train.shape)
 
-epochs  = 50
+epochs  = 15
 
 model = lstm.build_model([1, 50, 100, 1])
 

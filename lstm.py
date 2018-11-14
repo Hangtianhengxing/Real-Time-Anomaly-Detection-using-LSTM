@@ -21,16 +21,21 @@ def build_model(layers):
 	#model.summary()
 	return model
 	
-def predict_point_by_point(model,data,target):
+def predict_point_by_point(model,x_test,y_test,x_train,y_train):
+	predicted_data = []
 #Predict each timestep given the last sequence of true data, in effect only predicting 1 step ahead each time
-	print('[Model] Predicting Point-by-Point...')
-	predicted = model.predict(data)
-	'''predicted_data = []
-	for i in range(len(data)):
-		print (data[i])
-		predicted = model.predict(data[i].shape[0],data[i].shape[1],1)
-		print (mse(predicted,target[i]))
-		predicted_data.append(predicted)'''
-	predicted = np.reshape(predicted, (predicted.size))
-	return predicted
+	for i in range(len(x_test)):
+		data = x_test[i].reshape(1,x_test[i].shape[0],1)
+		x_train = np.append(x_train,data,axis=0)
+		x_train = np.delete(x_train,0,0)
+		y_train = np.append(y_train,y_test[i])
+		y_train = np.delete(y_train,0,0)
+		predicted = model.predict(data)[0][0]
+		#predicted = np.reshape(predicted,predicted.size)
+		predicted_data.append(predicted)
+		if (i+1)%50==0:
+			if mse(y_test[i-49:i],predicted_data[i-49:i])>0.06:
+				model.fit(x_train,y_train,batch_size=90,nb_epoch=4,validation_split=0.05)
+		print (i)
+	return predicted_data
 	
